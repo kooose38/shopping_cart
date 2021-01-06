@@ -8,7 +8,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       products: data.products,
-      cart: [],
+      cart: localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [],
       size: "",
       sort: "",
     }
@@ -29,6 +29,8 @@ class App extends React.Component {
     this.setState({
       cart: cart
     })
+    localStorage.setItem("cart", JSON.stringify(cart));
+
   }
 
   addToCart(product) {
@@ -43,6 +45,9 @@ class App extends React.Component {
     this.setState({
       cart: cart
     })
+    //ローカルにカートの更新情報を保持　データベースがないため
+    //DEVTOOLS : Application localStorage で確認
+    localStorage.setItem("cart", JSON.stringify(cart));
   };
 
   filterProducts(e) {
@@ -84,7 +89,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state.cart);
     return (
       <div className="grid-container">
         <header>

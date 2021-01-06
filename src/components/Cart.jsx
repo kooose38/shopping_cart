@@ -4,9 +4,11 @@ import formatCurrency from '../Util';
 const Cart = (props) => {
    const cart = props.cart;
 
+   const item = cart.map(item => item.count);
+
    const cartReducer = useMemo(() => {
       return cart.reduce((sum, cart) => sum += cart.price, 0)
-   }, [cart]);
+   }, [cart, item]);
 
    return (
       <div>
