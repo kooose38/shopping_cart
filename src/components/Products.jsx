@@ -25,6 +25,7 @@ class Products extends React.Component {
    render() {
       return (
          <div>
+            {/* animation */}
             <Fade bottom cascade>
                <ul className="products">
                   {this.props.products.map(product => (
