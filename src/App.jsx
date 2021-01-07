@@ -21,10 +21,13 @@ class App extends React.Component {
   removeFormCart(item) {
     const cart = [...this.state.cart];
     const index = cart.findIndex(cartItem => cartItem._id === item._id);
-    if (index === -1) {
+    if (cart[index].count > 1) {
+      cart[index].count--;
+    } else if (cart[index].count === 1) {
+      cart.splice(index, 1);
+    } else {
       return;
     }
-    cart.splice(index, 1);
 
     this.setState({
       cart: cart
@@ -51,41 +54,49 @@ class App extends React.Component {
   };
 
   filterProducts(e) {
-    if (e.target.value === "") {
+    const sizes = e.target.value;
+    if (sizes === "") {
       this.setState({
-        size: e.target.value,
-        products: data.products,
+        size: sizes,
+        products: [...data.products],
       })
     } else {
-      const products = [...this.state.products];
+      const products = [...data.products];
       this.setState({
-        size: e.target.value,
+        size: sizes,
         //配列からe.target.valueと同じ文字列を含んだものだけ抽出 indexOf() 存在していなければ-1
-        products: products.filter(product => product.availableSizes.indexOf(e.target.value) != -1)
+        products: products.filter(product => product.availableSizes.indexOf(sizes) != -1)
       })
     }
   }
   sortProducts(e) {
     const sort = e.target.value;
-    this.setState({
-      sort: sort,
-      products: [...this.state.products].sort((a, b) => {
-        if (sort === "lowest") {
-          if (a.price > b.price) {
-            return 1
-          } else {
-            return -1
-          }
-        }
-        if (sort === "highest") {
-          if (a.price < b.price) {
-            return 1
-          } else {
-            return -1
-          }
-        }
+    if (sort === "") {
+      this.setState({
+        sort: sort,
+        products: [...data.products],
       })
-    })
+    } else {
+      this.setState({
+        sort: sort,
+        products: [...data.products].sort((a, b) => {
+          if (sort === "lowest") {
+            if (a.price > b.price) {
+              return 1
+            } else {
+              return -1
+            }
+          }
+          if (sort === "highest") {
+            if (a.price < b.price) {
+              return 1
+            } else {
+              return -1
+            }
+          }
+        })
+      })
+    }
   }
 
   render() {

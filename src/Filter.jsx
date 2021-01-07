@@ -5,14 +5,14 @@ const Filter = (props) => {
       <div className="filter">
          <div className="filter-result">{props.count}</div>
          <div className="filter-sort">Order {" "}
-            <select value={props.size} onChange={(e) => props.sortProducts(e)}>
-               <option>Latest</option>
+            <select value={props.sort} onChange={(e) => props.sortProducts(e)}>
+               <option value="">Latest</option>
                <option value="lowest">Lowest</option>
                <option value="highest">Higthes</option>
             </select>
          </div>
          <div className="filter-size">Filter {" "}
-            <select value={props.sort} onChange={(e) => props.filterProducts(e)}>
+            <select value={props.size} onChange={(e) => props.filterProducts(e)}>
                <option value="">All</option>
                <option value="XS">XS</option>
                <option value="S">S</option>
