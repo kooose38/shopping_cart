@@ -1,6 +1,6 @@
-import { FETCH_PRODUCTS } from "./constans";
+import { FETCH_PRODUCTS, FILTER_PRODUCTS, SORT_PRODUCTS } from "./constans";
 
-export const fetchProducts = async () => {
+export const fetchProducts = () => {
    return async (dispatch) => {
       const res = await fetch(`http://localhost:5000/api/products`);
       const products = await res.json();
@@ -12,4 +12,53 @@ export const fetchProducts = async () => {
          }
       });
    }
-}
+};
+
+export const filterProducts = (sizes) => {
+   return async (dispatch) => {
+      const res = await fetch(`http://localhost:5000/api/products`);
+      const products = await res.json();
+      const filterProduct = products.filter(product => product.availableSizes.indexOf(sizes) != -1);
+      dispatch({
+         type: FILTER_PRODUCTS,
+         payload: {
+            list: (sizes === "" ? products : filterProduct),
+            size: sizes
+         }
+      })
+   }
+};
+
+
+export const sortProducts = (products, sort) => {
+   return async (dispatch) => {
+      const sortProducts = [...products];
+
+      sortProducts.sort((a, b) => {
+         if (sort === "lowest") {
+            if (a.price > b.price) {
+               return 1
+            } else {
+               return -1
+            }
+         }
+         if (sort === "highest") {
+            if (a.price < b.price) {
+               return 1
+            } else {
+               return -1
+            }
+         }
+
+      })
+
+      dispatch({
+         type: SORT_PRODUCTS,
+         payload: {
+            list: sortProducts,
+            sort: sort
+         }
+      })
+   }
+};
+

@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import Modal from "react-modal";
 import Zoom from 'react-reveal/Zoom';
 import formatCurrency from '../Util';
-
+import { useDispatch } from "react-redux";
+import { addCart } from '../redux/carts/actions';
 
 const HomeModal = (props) => {
+   const dispatch = useDispatch();
    return (
       <Modal isOpen={true} onClick={props.closeModal}>
          <Zoom>
@@ -33,7 +35,7 @@ const HomeModal = (props) => {
                      {formatCurrency(props.product.price)}
                   </div>
                   <button className="button primary" onClick={() => {
-                     props.addToCart(props.product);
+                     dispatch(addCart(props.product))
                      props.closeModal();
                   }}>
                      カートに商品を追加する

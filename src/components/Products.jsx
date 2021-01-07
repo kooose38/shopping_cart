@@ -4,6 +4,8 @@ import Fade from "react-reveal/Fade";
 import { HomeModal } from "./";
 import { connect } from "react-redux"
 import { fetchProducts } from '../redux/products/actions';
+import { addCart } from '../redux/carts/actions';
+
 //class コンポーネント
 class Products extends React.Component {
    constructor(props) {
@@ -25,7 +27,7 @@ class Products extends React.Component {
       }
    }
    componentDidMount() {
-      this.props.handleFetchProducts()
+      this.props.fetchProducts()
    }
    render() {
       return (
@@ -54,7 +56,7 @@ class Products extends React.Component {
                                        <div>
                                           {formatCurrency(product.price)}
                                        </div>
-                                       <button className="button primary" onClick={() => this.props.addToCart(product)}>
+                                       <button className="button primary" onClick={() => this.props.addCart(product)}>
                                           商品を追加する
                            </button>
                                     </div>
@@ -71,7 +73,6 @@ class Products extends React.Component {
                this.state.product && (
                   <HomeModal
                      product={this.state.product}
-                     addToCart={this.props.addToCart}
                      closeModal={this.closeModal}
                   />
 
@@ -89,13 +90,16 @@ class Products extends React.Component {
 //最後に子Component名称
 
 const mapStateToProps = (state) => {
-   return { products: state.products.list }
+   return {
+      products: state.products.list,
+      cart: state.cart.cartItem,
+   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-   return {
-      handleFetchProducts: async () => dispatch(await fetchProducts())
-   }
+
+const mapDispatchToProps = {
+   fetchProducts,
+   addCart,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Products);
