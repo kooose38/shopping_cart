@@ -1,7 +1,24 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useCallback } from 'react'
 import formatCurrency from '../Util';
 
 const Cart = (props) => {
+   const [name, setName] = useState("");
+   const [email, setEmail] = useState("");
+   const [address, setAddress] = useState("")
+   const [showCheckout, setShowCheckout] = useState(false);
+
+   const inputName = useCallback((e) => {
+      setName(e.target.value)
+   }, [setName]);
+
+   const inputEmail = useCallback((e) => {
+      setEmail(e.target.value)
+   }, [setEmail]);
+
+   const inputAddress = useCallback((e) => {
+      setAddress(e.target.value);
+   }, [setAddress])
+
    const cart = props.cart;
 
    const item = cart.map(item => item.count);
@@ -9,6 +26,27 @@ const Cart = (props) => {
    const cartReducer = useMemo(() => {
       return cart.reduce((sum, cart) => sum += cart.price, 0)
    }, [cart, item]);
+
+   const createOrder = (e) => {
+      e.preventDefault();
+      if (name === "" || email === "" || address === "") {
+         alert("必須項目を入力してください。")
+         return;
+      }
+
+      const order = {
+         name: name,
+         email: email,
+         address: address,
+         cartItem: props.cart,
+      };
+
+      props.createOrder(order);
+      setName("");
+      setEmail("");
+      setAddress("");
+
+   }
 
    return (
       <div>
@@ -45,18 +83,61 @@ const Cart = (props) => {
 
             </div>
             {props.cart.length > 0 && (
-               <div className="cart">
-                  <div className="total">
-                     <div>
-                        Total : {formatCurrency(cartReducer)}
+               <div>
+                  <div className="cart">
+                     <div className="total">
+                        <div>
+                           Total : {formatCurrency(cartReducer)}
+                        </div>
+                        <button className="button primary" onClick={() => setShowCheckout(true)}>Proceed</button>
                      </div>
-                     <button className="button primary">Proceed</button>
-                  </div>
 
+                  </div>
+                  {showCheckout && (
+                     <div className="cart">
+                        <form onSubmit={(e) => createOrder(e)}>
+                           <ul className="form-container">
+                              <li>
+                                 <label>Name</label>
+                                 <input
+                                    name="name"
+                                    value={name}
+                                    type="text"
+                                    required
+                                    onChange={inputName}
+                                 />
+                              </li>
+                              <li>
+                                 <label>Email</label>
+                                 <input
+                                    name="email"
+                                    value={email}
+                                    type="email"
+                                    required
+                                    onChange={inputEmail}
+                                 />
+                              </li>
+                              <li>
+                                 <label>address</label>
+                                 <input
+                                    name="address"
+                                    value={address}
+                                    type="text"
+                                    required
+                                    onChange={inputAddress}
+                                 />
+                              </li>
+                              <li>
+                                 <button type="submit" className="button primary">Checkout</button>
+                              </li>
+                           </ul>
+                        </form>
+                     </div>
+
+                  )}
                </div>
 
             )}
-
          </div>
       </div>
    );

@@ -16,10 +16,16 @@ class App extends React.Component {
     this.sortProducts = this.sortProducts.bind(this);
     this.addToCart = this.addToCart.bind(this);
     this.removeFormCart = this.removeFormCart.bind(this);
+    this.createOrder = this.createOrder.bind(this);
+  }
+
+  createOrder(order) {
+    alert(`${order.name}様、注文が完了しました。`)
   }
 
   removeFormCart(item) {
     const cart = [...this.state.cart];
+
     const index = cart.findIndex(cartItem => cartItem._id === item._id);
     if (cart[index].count > 1) {
       cart[index].count--;
@@ -55,13 +61,13 @@ class App extends React.Component {
 
   filterProducts(e) {
     const sizes = e.target.value;
+    const products = [...data.products];
     if (sizes === "") {
       this.setState({
         size: sizes,
-        products: [...data.products],
+        products: products,
       })
     } else {
-      const products = [...data.products];
       this.setState({
         size: sizes,
         //配列からe.target.valueと同じ文字列を含んだものだけ抽出 indexOf() 存在していなければ-1
@@ -71,15 +77,16 @@ class App extends React.Component {
   }
   sortProducts(e) {
     const sort = e.target.value;
+    const products = [...data.products];
     if (sort === "") {
       this.setState({
         sort: sort,
-        products: [...data.products],
+        products: products,
       })
     } else {
       this.setState({
         sort: sort,
-        products: [...data.products].sort((a, b) => {
+        products: products.sort((a, b) => {
           if (sort === "lowest") {
             if (a.price > b.price) {
               return 1
@@ -118,7 +125,7 @@ class App extends React.Component {
               <Products products={this.state.products} addToCart={this.addToCart} />
             </div>
             <div className="sidebar">
-              <Cart cart={this.state.cart} removeFormCart={this.removeFormCart} />
+              <Cart cart={this.state.cart} removeFormCart={this.removeFormCart} createOrder={this.createOrder} />
             </div>
           </div>
         </main>
