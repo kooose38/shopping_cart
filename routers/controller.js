@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const shortid = require("shortid");
-//データベースのモデル
+//mongoDB データベースのモデル
 const Product = mongoose.model("Products", new mongoose.Schema({
    _id: { type: String, default: shortid.generate },
    title: String,
