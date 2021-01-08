@@ -7,6 +7,9 @@ const initialState = {
    },
    cart: {
       cartItem: JSON.parse(localStorage.getItem("cartItem")) || [],
+   },
+   order: {
+      orderItem: [],
    }
 }
 

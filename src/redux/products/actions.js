@@ -14,10 +14,13 @@ export const fetchProducts = () => {
    }
 };
 
+//filterは毎回すべてのデータから更新したいので都度、fetch.dataする
+//もしstateからfilterならば、このメソッドを呼び出すごとにデータが減っていく。
 export const filterProducts = (sizes) => {
    return async (dispatch) => {
       const res = await fetch(`http://localhost:5000/api/products`);
-      const products = await res.json();
+      const products = await res.json(); //[]
+      //配列から、sizeのstringを含んだproductsをfilter()
       const filterProduct = products.filter(product => product.availableSizes.indexOf(sizes) != -1);
       dispatch({
          type: FILTER_PRODUCTS,

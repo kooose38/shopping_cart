@@ -3,7 +3,7 @@ import formatCurrency from '../Util';
 import Fade from "react-reveal";
 import { connect } from "react-redux";
 import { removeFromCart } from "../redux/carts/actions";
-import { CartCard, TextForm } from './';
+import { CartCard, OrderProduct, TextForm } from './';
 
 class Cart extends React.Component {
    constructor(props) {
@@ -14,7 +14,7 @@ class Cart extends React.Component {
       this.handleToggle = this.handleToggle.bind(this);
    }
    cartReducer() {
-      return this.props.cart.reduce((sum, cart) => sum += cart.price, 0)
+      return this.props.cart.reduce((sum, cart) => sum + cart.count * cart.price, 0)
    }
 
    handleToggle() {
@@ -22,6 +22,7 @@ class Cart extends React.Component {
    }
 
    render() {
+      console.log(this.props.order);
       return (
          <div>
             {this.props.cart.length === 0 ? (
@@ -32,6 +33,11 @@ class Cart extends React.Component {
                   </div>
                )}
             <div>
+               {this.props.order.length > 0 && (
+                  this.props.order.map(order => (
+                     <OrderProduct order={order} key={order.id} />
+                  ))
+               )}
                <div className="cart">
                   {this.props.cart.length > 0 && (
                      <Fade left cascade>
@@ -55,10 +61,8 @@ class Cart extends React.Component {
                      </div>
                      {this.state.showCheckout && (
                         <TextForm />
-
                      )}
                   </div>
-
                )}
             </div>
          </div >
@@ -70,6 +74,7 @@ class Cart extends React.Component {
 const mapStateToProps = (state) => {
    return {
       cart: state.cart.cartItem,
+      order: state.order.orderItem,
    }
 };
 

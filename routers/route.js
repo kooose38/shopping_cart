@@ -11,5 +11,8 @@ router
    .route("/api/products/:id")
    .delete(controller.deleteProduct)
 
+router
+   .route("/api/orders")
+   .post(controller.createOrder)
 
 module.exports = router;

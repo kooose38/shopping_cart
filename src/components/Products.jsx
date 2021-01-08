@@ -1,7 +1,6 @@
 import React from 'react'
-import formatCurrency from '../Util';
 import Fade from "react-reveal/Fade";
-import { HomeModal } from "./";
+import { HomeModal, ProductList } from "./";
 import { connect } from "react-redux"
 import { fetchProducts } from '../redux/products/actions';
 import { addCart } from '../redux/carts/actions';
@@ -41,27 +40,11 @@ class Products extends React.Component {
 
                         <ul className="products">
                            {this.props.products.map(product => (
-                              <li key={product._id}>
-                                 <div className="product">
-                                    <a
-                                       href={"#" + product._id}
-                                       onClick={() => this.openModal(product)}
-                                    >
-                                       <img src={product.image} alt={product.title} />
-                                       <p>
-                                          {product.title}
-                                       </p>
-                                    </a>
-                                    <div className="product-price">
-                                       <div>
-                                          {formatCurrency(product.price)}
-                                       </div>
-                                       <button className="button primary" onClick={() => this.props.addCart(product)}>
-                                          商品を追加する
-                           </button>
-                                    </div>
-                                 </div>
-                              </li>
+                              <ProductList
+                                 product={product}
+                                 openModel={this.openModal}
+                                 key={product._id}
+                              />
                            ))}
                         </ul>
                      )
